@@ -204,6 +204,13 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
+"@verdaccio/commons-api@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@verdaccio/commons-api/-/commons-api-0.1.2.tgz#084c2c06b22e998ff3bab265de17397998953da3"
+  integrity sha512-BweLdqHGVpDPZf1BkFVOTb+OW+WQp8TiEFJ4EvVJkpngg9rgvK9MAdJF/NZorGuUIoVIPJmtNwf/fId/ya9Udw==
+  dependencies:
+    http-errors "1.7.3"
+
 "@verdaccio/file-locking@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@verdaccio/file-locking/-/file-locking-1.0.0.tgz#2f148612d9ce5c3c0dfd826151561b2aa887777d"
@@ -243,11 +250,6 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@verdaccio/streams/-/streams-2.0.0.tgz#27f51d0cb19d5e49248860942092646e9a357967"
   integrity sha512-QW1LsYir3wNnqhSznbJlt0iqkcgve0LpXI8RkoTTBPrq3M6ei3Ys4iw+JQKFve3gmYw9O+w8lBiOLc1qvvsoVQ==
-
-"@verdaccio/types@^6.1.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@verdaccio/types/-/types-6.2.0.tgz#0684fc8fc9178133ca7863feae6bd4e3e3010fca"
-  integrity sha512-ilmPVj7rSlZW+mfIVwLzKr8ERQrFK62bfdG3jYuJCbF5OJAGA07OSSjqltjFhejbkM7KKERX3YkRgX93L2PAGg==
 
 "@verdaccio/ui-theme@0.1.11":
   version "0.1.11"
