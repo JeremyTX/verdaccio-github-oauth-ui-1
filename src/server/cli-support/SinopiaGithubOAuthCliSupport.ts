@@ -2,9 +2,10 @@ import { Application, NextFunction, Request, Response } from "express"
 
 import { GithubClient } from "../github"
 import { getConfig, PluginConfig } from "../plugin/PluginConfig"
-import { Auth, MiddlewarePlugin } from "../verdaccio-types"
+// import { Auth, MiddlewarePlugin } from "../verdaccio-types"
+import * as Verdaccio from '@verdaccio/types'
 
-export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
+export class SinopiaGithubOAuthCliSupport implements Verdaccio.IPluginMiddleware<any> {
 
   private readonly github = new GithubClient(this.config.user_agent)
 
@@ -16,7 +17,7 @@ export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
   /**
    * Implements the middleware plugin interface.
    */
-  register_middlewares(app: Application, auth: Auth, storage: any) {
+  register_middlewares(app: Application, auth: Verdaccio.IBasicAuth<any>, storage: Verdaccio.IStorageManager<any>) {
     app.use("/oauth/authorize", (req: Request, res: Response) => {
       res.redirect("/-/oauth/authorize/cli")
     })

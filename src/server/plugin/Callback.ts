@@ -2,7 +2,8 @@ import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
 import { GithubClient } from "../github"
-import { Auth, User } from "../verdaccio-types"
+// import { Auth, User } from "../verdaccio-types"
+import * as Verdaccio from '@verdaccio/types'
 
 import { getConfig, PluginConfig } from "./PluginConfig"
 
@@ -14,7 +15,7 @@ export class Callback {
 
   constructor(
     private readonly config: PluginConfig,
-    private readonly auth: Auth,
+    private readonly auth: Verdaccio.IBasicAuth<any>,
   ) { }
 
   /**
@@ -44,9 +45,10 @@ export class Callback {
       const npmAuth = githubUser.login + ":" + githubOauth.access_token
       const npmAuthEncrypted = this.auth.aesEncrypt(new Buffer(npmAuth)).toString("base64")
 
-      const frontendUser: User = {
+      const frontendUser: Verdaccio.RemoteUser = {
         name: githubUser.login,
         real_groups: githubOrgNames,
+        groups: []
       }
       const frontendToken = this.auth.issueUIjwt(frontendUser)
       const frontendUrl = "/?" + querystring.stringify({

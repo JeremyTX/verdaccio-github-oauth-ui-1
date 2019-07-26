@@ -3,15 +3,24 @@ import { Application } from "express"
 import { get, intersection } from "lodash"
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
-import {
-  Auth,
-  AuthCallback,
-  AuthPlugin,
-  MiddlewarePlugin,
-  PackageAccess,
-  RemoteUser,
-  Storage,
-} from "../verdaccio-types"
+// import {
+  // Auth,
+  // AuthCallback,
+  // AuthPlugin,
+  // MiddlewarePlugin,
+  // PackageAccess,
+  // RemoteUser,
+  // Storage,
+// } from "../verdaccio-types"
+import * as Verdaccio from '@verdaccio/types'
+// * https://verdaccio.org/docs/en/dev-plugins#authentication-plugin
+// */
+// export interface AuthPlugin {
+//  login_url?: string
+//  adduser?: (user: string, password: string, cb: AuthCallback) => void
+//  allow_access?: (user: RemoteUser, pkg: PackageAccess, cb: AuthCallback) => void
+//  allow_publish?: (user: RemoteUser, pkg: PackageAccess, cb: AuthCallback) => void
+//  authenticate: (user: string, password: string, cb: AuthCallback) => void
 
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
@@ -33,7 +42,7 @@ function log(...args: any[]) {
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
+export default class GithubOauthUiPlugin implements Verdaccio.IPluginAuth<any> {
 
   private readonly github = new GithubClient(this.config.user_agent)
   private readonly cache: { [username: string]: UserDetails } = {}
@@ -49,7 +58,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the middleware plugin interface.
    */
-  register_middlewares(app: Application, auth: Auth, storage: Storage) {
+  register_middlewares(app: Application, auth: Verdaccio.IBasicAuth<any>, storage: Verdaccio.IStorageManager<any>) {
     this.cliSupport.register_middlewares(app, auth, storage)
 
     if (get(this.config, "web.enable", true)) {
@@ -69,7 +78,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the auth plugin interface.
    */
-  async authenticate(username: string, authToken: string, cb: AuthCallback) {
+  async authenticate(username: string, authToken: string, cb: Verdaccio.Callback) {
     let details = this.cache[username]
 
     if (!details || details.authToken !== authToken || details.expires > Date.now()) {
@@ -95,7 +104,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     }
   }
 
-  allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
+  allow_access(user: Verdaccio.RemoteUser, pkg: Verdaccio.AllowAccess & Verdaccio.PackageAccess, cb: Verdaccio.Callback): void {
     const requiredAccess = [...pkg.access || []]
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.config.auth[pluginName].org)
